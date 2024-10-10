@@ -4,7 +4,10 @@ export const formatDate = (date: Date | string | undefined) => {
   if (isNaN(parsedDate.getTime())) {
     return "Data inválida";
   }
-  return parsedDate.toLocaleDateString();
+  const dia = String(parsedDate.getUTCDate()).padStart(2, "0");
+  const mes = String(parsedDate.getUTCMonth() + 1).padStart(2, "0");
+  const ano = parsedDate.getUTCFullYear();
+  return `${dia}/${mes}/${ano}`;
 };
 
 export const formatToStandardDate = (
@@ -15,9 +18,9 @@ export const formatToStandardDate = (
   if (isNaN(parsedDate.getTime())) {
     return "";
   }
-  const year = parsedDate.getFullYear();
-  const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
-  const day = String(parsedDate.getDate()).padStart(2, "0");
+  const year = parsedDate.getUTCFullYear();
+  const month = String(parsedDate.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(parsedDate.getUTCDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 };

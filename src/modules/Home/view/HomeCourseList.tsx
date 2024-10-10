@@ -18,8 +18,12 @@ const CourseList: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [object, SetObject] = useState<Course>();
   const [courses, SetListCourses] = useState<Course[]>([]);
-  const edit = (obj: Course) => {
+  const editOrAdd = (obj: Course) => {
     SetObject(obj);
+
+    SetListCourses((prevCourses) =>
+      prevCourses.map((course) => (course.id === obj.id ? obj : course))
+    );
     setOpenModal(true);
   };
 
@@ -27,8 +31,9 @@ const CourseList: React.FC = () => {
     setOpenModal(false);
   };
   const deleteCourse = (obj: Course) => {
-    const updatedCourses = courses.filter((course) => course.id !== obj.id);
-    SetListCourses(updatedCourses);
+    SetListCourses((prevCourses) =>
+      prevCourses.filter((course) => course.id !== obj.id)
+    );
   };
 
   useEffect(() => {
@@ -55,7 +60,7 @@ const CourseList: React.FC = () => {
                 aria-label="Editar"
                 icon={<EditIcon />}
                 size="sm"
-                onClick={() => edit(course)}
+                onClick={() => editOrAdd(course)}
               />
               <IconButton
                 aria-label="Excluir"
@@ -78,6 +83,7 @@ const CourseList: React.FC = () => {
           onClose={closeModal}
           titleModal="Editar cursos"
           params={object}
+          onSave={editOrAdd}
         />
       )}
     </Box>
