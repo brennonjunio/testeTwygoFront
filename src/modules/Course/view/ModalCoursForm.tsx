@@ -21,12 +21,14 @@ interface CourseFormProps {
   onClose: () => void;
   titleModal?: string;
   params?: Course;
+  onSave?: (obj: Course) => void;
 }
 
 const ModalCourseForm: React.FC<CourseFormProps> = ({
   onClose,
   titleModal,
   params,
+  onSave,
 }) => {
   const [body, setBody] = useState<Course>({
     title: "",
@@ -52,10 +54,11 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
       !body.FinalDate
     ) {
       setError(true);
-      return;
     }
     setError(false);
-    
+    if (onSave) {
+      onSave(body);
+    }
     onClose();
   };
 
