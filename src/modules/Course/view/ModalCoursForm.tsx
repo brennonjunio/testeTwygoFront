@@ -13,6 +13,7 @@ import {
   ModalBody,
   VStack,
   Heading,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { Course } from "../../../services/Course/InterfaceCourse";
 import { formatToStandardDate } from "../../../services/Utils";
@@ -69,7 +70,7 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
   }, [params]);
 
   return (
-    <Modal isOpen={true} onClose={onClose} isCentered>
+    <Modal isOpen={true} onClose={onClose} isCentered size="xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
@@ -96,24 +97,26 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
                 resize="none"
               />
             </FormControl>
-            <FormControl isRequired isInvalid={error && !body.InitialDate}>
-              <FormLabel>Data de Início</FormLabel>
-              <Input
-                name="InitialDate"
-                type="date"
-                value={formatToStandardDate(body?.InitialDate)}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-            <FormControl isRequired isInvalid={error && !body.FinalDate}>
-              <FormLabel>Data de Fim</FormLabel>
-              <Input
-                name="FinalDate"
-                type="date"
-                value={formatToStandardDate(body.FinalDate)}
-                onChange={handleInputChange}
-              />
-            </FormControl>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+              <FormControl isRequired isInvalid={error && !body.InitialDate}>
+                <FormLabel>Data de Início</FormLabel>
+                <Input
+                  name="InitialDate"
+                  type="date"
+                  value={formatToStandardDate(body?.InitialDate)}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+              <FormControl isRequired isInvalid={error && !body.FinalDate}>
+                <FormLabel>Data de Fim</FormLabel>
+                <Input
+                  name="FinalDate"
+                  type="date"
+                  value={formatToStandardDate(body.FinalDate)}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </SimpleGrid>
           </VStack>
         </ModalBody>
 
