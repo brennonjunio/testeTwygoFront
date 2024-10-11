@@ -13,24 +13,28 @@ import {
   Container,
   useBreakpointValue,
   Badge,
+  useToast,
+  Select,
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon, AddIcon } from "@chakra-ui/icons";
 import CourseForm from "../../Course/view/ModalCoursForm";
 import { Course } from "../../../services/Course/InterfaceCourse";
 import { formatDate } from "../../../services/Utils";
 import { CourseDefaultList } from "../../../services/Course/CourseObjectDefault";
+import { useNavigate } from "react-router-dom";
 
 const CourseList: React.FC = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [courses, setCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [titleFilter, setTitleFilter] = useState("");
-  const [startDateFilter, setStartDateFilter] = useState("");
-  const [endDateFilter, setEndDateFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("todos");
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const closeModal = () => {
-    setOpenModal(false);
+    setIsModalOpen(false);
     setSelectedCourse(null);
   };
 
@@ -42,12 +46,12 @@ const CourseList: React.FC = () => {
       InitialDate: "",
       FinalDate: "",
     });
-    setOpenModal(true);
+    setIsModalOpen(true);
   };
 
   const editCourse = (course: Course) => {
     setSelectedCourse(course);
-    setOpenModal(true);
+    setIsModalOpen(true);
   };
 
   const saveCourse = (updatedCourse: Course) => {
@@ -70,6 +74,20 @@ const CourseList: React.FC = () => {
     );
   };
 
+  const viewCourse = (course: Course) => {
+    if (isCourseOpen(course.FinalDate as string)) {
+      navigate(`/course/${course.id}`);
+    } else {
+      toast({
+        title: "Curso fechado",
+        description: "Este curso já foi encerrado e não está mais disponível.",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   useEffect(() => {
     setCourses(CourseDefaultList);
   }, []);
@@ -77,12 +95,14 @@ const CourseList: React.FC = () => {
   useEffect(() => {
     const filtered = courses.filter((course) => {
       const titleMatch = course.title.toLowerCase().includes(titleFilter.toLowerCase());
-      const startDateMatch = !startDateFilter || new Date(course.InitialDate) >= new Date(startDateFilter);
-      const endDateMatch = !endDateFilter || new Date(course.FinalDate) <= new Date(endDateFilter);
-      return titleMatch && startDateMatch && endDateMatch;
+      const statusMatch =
+        statusFilter === "todos" ||
+        (statusFilter === "abertos" && isCourseOpen(course.FinalDate as string)) ||
+        (statusFilter === "fechados" && !isCourseOpen(course.FinalDate as string));
+      return titleMatch && statusMatch;
     });
     setFilteredCourses(filtered);
-  }, [courses, titleFilter, startDateFilter, endDateFilter]);
+  }, [courses, titleFilter, statusFilter]);
 
   const gridColumns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4, xl: 5 });
 
@@ -113,26 +133,18 @@ const CourseList: React.FC = () => {
               placeholder="Digite o título do curso"
             />
           </FormControl>
-          <Flex direction={{ base: "column", sm: "row" }} gap={3}>
-            <FormControl flex={1}>
-              <FormLabel fontSize="sm">Data de início</FormLabel>
-              <Input
-                size="sm"
-                type="date"
-                value={startDateFilter}
-                onChange={(e) => setStartDateFilter(e.target.value)}
-              />
-            </FormControl>
-            <FormControl flex={1}>
-              <FormLabel fontSize="sm">Data de fim</FormLabel>
-              <Input
-                size="sm"
-                type="date"
-                value={endDateFilter}
-                onChange={(e) => setEndDateFilter(e.target.value)}
-              />
-            </FormControl>
-          </Flex>
+          <FormControl>
+            <FormLabel fontSize="sm">Status do curso</FormLabel>
+            <Select
+              size="sm"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="todos">Todos</option>
+              <option value="abertos">Abertos</option>
+              <option value="fechados">Fechados</option>
+            </Select>
+          </FormControl>
         </VStack>
 
         <SimpleGrid columns={gridColumns} spacing={4}>
@@ -144,6 +156,9 @@ const CourseList: React.FC = () => {
               p={2}
               bg="white"
               boxShadow="sm"
+              onClick={() => viewCourse(course)}
+              cursor="pointer"
+              _hover={{ boxShadow: "md" }}
             >
               <VStack align="start" spacing={2}>
                 <Text fontWeight="bold" fontSize={{ base: "sm", md: "md" }}>{course.title}</Text>
@@ -157,7 +172,10 @@ const CourseList: React.FC = () => {
                   <Button
                     leftIcon={<EditIcon />}
                     size="xs"
-                    onClick={() => editCourse(course)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editCourse(course);
+                    }}
                   >
                     Editar
                   </Button>
@@ -165,7 +183,10 @@ const CourseList: React.FC = () => {
                     leftIcon={<DeleteIcon />}
                     size="xs"
                     colorScheme="red"
-                    onClick={() => deleteCourse(course.id ?? 0)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteCourse(course.id ?? 0);
+                    }}
                   >
                     Excluir
                   </Button>
@@ -174,7 +195,7 @@ const CourseList: React.FC = () => {
             </Box>
           ))}
         </SimpleGrid>
-        {openModal && selectedCourse && (
+        {isModalOpen && selectedCourse && (
           <CourseForm
             onClose={closeModal}
             titleModal={selectedCourse.id === 0 ? "Adicionar Curso" : "Editar Curso"}
