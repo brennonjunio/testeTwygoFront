@@ -4,12 +4,12 @@ import {
   Heading,
   Text,
   VStack,
-  HStack,
   Button,
   AspectRatio,
   List,
   ListItem,
   ListIcon,
+  Flex,
 } from "@chakra-ui/react";
 import { ArrowRightIcon, CheckCircleIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { Course } from "../../../services/Course/InterfaceCourse";
@@ -26,11 +26,12 @@ const CourseView: React.FC<{ course: Course }> = ({ course }) => {
   const [currentLesson, setCurrentLesson] = useState<VideoLesson | null>(null);
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const simulatedLessons: VideoLesson[] = [
-      { id: 1, title: "Course Introduction", url: "https://example.com/lesson1" },
-      { id: 2, title: "Basic Concepts", url: "https://example.com/lesson2" },
-      { id: 3, title: "Advanced Practice", url: "https://example.com/lesson3" },
+      { id: 1, title: "Introdução ao Curso", url: "https://example.com/lesson1" },
+      { id: 2, title: "Conceitos Básicos", url: "https://example.com/lesson2" },
+      { id: 3, title: "Prática Avançada", url: "https://example.com/lesson3" },
     ];
     setVideoLessons(simulatedLessons);
     setCurrentLesson(simulatedLessons[0]);
@@ -45,27 +46,27 @@ const CourseView: React.FC<{ course: Course }> = ({ course }) => {
   };
 
   return (
-    <Box p={5}>
-      <Button leftIcon={<ArrowBackIcon />} onClick={goToPreviousPage} mb={4}>
-        Back
+    <Box p={3}>
+      <Button leftIcon={<ArrowBackIcon />} onClick={goToPreviousPage} mb={4} size="sm">
+        Voltar
       </Button>
-      <Heading mb={4}>{course.title}</Heading>
-      <Text mb={6}>{course.description}</Text>
+      <Heading mb={4} fontSize={{ base: "xl", md: "2xl" }}>{course.title}</Heading>
+      <Text mb={6} fontSize={{ base: "sm", md: "md" }}>{course.description}</Text>
 
-      <HStack align="start" spacing={8}>
-        <VStack flex={2} align="stretch">
+      <Flex direction={{ base: "column", md: "row" }} align="start">
+        <VStack flex={2} align="stretch" width="100%" mb={{ base: 6, md: 0 }} spacing={4}>
           {currentLesson && (
             <>
               <AspectRatio ratio={16 / 9}>
                 <Box as="iframe" src={currentLesson.url} allowFullScreen />
               </AspectRatio>
-              <Heading size="md" mt={4}>{currentLesson.title}</Heading>
+              <Heading size="md" fontSize={{ base: "lg", md: "xl" }}>{currentLesson.title}</Heading>
             </>
           )}
         </VStack>
 
-        <VStack flex={1} align="stretch">
-          <Heading size="md" mb={2}>Lesson List</Heading>
+        <VStack flex={1} align="stretch" width="100%" spacing={4} ml={{ base: 0, md: 8 }}>
+          <Heading size="md" fontSize={{ base: "lg", md: "xl" }}>Lista de Aulas</Heading>
           <List spacing={3}>
             {videoLessons.map((lesson) => (
               <ListItem key={lesson.id}>
@@ -74,6 +75,7 @@ const CourseView: React.FC<{ course: Course }> = ({ course }) => {
                   onClick={() => selectLesson(lesson)}
                   justifyContent="flex-start"
                   width="100%"
+                  fontSize={{ base: "sm", md: "md" }}
                 >
                   <ListIcon as={lesson === currentLesson ? CheckCircleIcon : ArrowRightIcon} color="green.500" />
                   {lesson.title}
@@ -82,7 +84,7 @@ const CourseView: React.FC<{ course: Course }> = ({ course }) => {
             ))}
           </List>
         </VStack>
-      </HStack>
+      </Flex>
     </Box>
   );
 };
