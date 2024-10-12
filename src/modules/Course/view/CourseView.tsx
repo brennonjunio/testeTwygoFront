@@ -42,7 +42,7 @@ const CourseView: React.FC<{ course: Course }> = ({ course }) => {
   };
 
   const goToPreviousPage = () => {
-    navigate(-1);
+    navigate("/");
   };
 
   return (
