@@ -14,6 +14,7 @@ import {
 import { ArrowRightIcon, CheckCircleIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { Course } from "../../../services/Course/InterfaceCourse";
 import { useNavigate } from "react-router-dom";
+import ReactPlayer from "react-player";
 
 interface VideoLesson {
   id: number;
@@ -26,12 +27,11 @@ const CourseView: React.FC<{ course: Course }> = ({ course }) => {
   const [currentLesson, setCurrentLesson] = useState<VideoLesson | null>(null);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const simulatedLessons: VideoLesson[] = [
-      { id: 1, title: "Introdução ao Curso", url: "https://example.com/lesson1" },
-      { id: 2, title: "Conceitos Básicos", url: "https://example.com/lesson2" },
-      { id: 3, title: "Prática Avançada", url: "https://example.com/lesson3" },
+      { id: 1, title: "Introdução ao Curso", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { id: 2, title: "Conceitos Básicos", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+      { id: 3, title: "Prática Avançada", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
     ];
     setVideoLessons(simulatedLessons);
     setCurrentLesson(simulatedLessons[0]);
@@ -58,7 +58,12 @@ const CourseView: React.FC<{ course: Course }> = ({ course }) => {
           {currentLesson && (
             <>
               <AspectRatio ratio={16 / 9}>
-                <Box as="iframe" src={currentLesson.url} allowFullScreen />
+                <ReactPlayer
+                  url={currentLesson.url}
+                  width="100%"
+                  height="100%"
+                  controls
+                />
               </AspectRatio>
               <Heading size="md" fontSize={{ base: "lg", md: "xl" }}>{currentLesson.title}</Heading>
             </>
