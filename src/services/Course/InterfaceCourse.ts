@@ -4,4 +4,10 @@ export interface Course {
   description: string;
   InitialDate: Date | string;
   FinalDate: Date | string;
+  Video?: Video;
+}
+
+interface Video {
+  sizeMb: number;
+  description: string;
 }
