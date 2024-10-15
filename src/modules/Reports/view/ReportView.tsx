@@ -31,6 +31,10 @@ import {
 } from "recharts";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import {
+  calculateMemoryByMonth,
+  calculateTotalMemory,
+} from "../../../services/Utils";
 
 const ReportView = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -44,33 +48,6 @@ const ReportView = () => {
     navigate("/");
   };
   const isMobile = useBreakpointValue({ base: true, md: false });
-
-  const calculateTotalMemory = (courses: Course[]) => {
-    return courses.reduce(
-      (total, course) => total + (course.Video?.sizeMb || 0),
-      0
-    );
-  };
-
-  const calculateMemoryByMonth = (courses: Course[]) => {
-    const memoryByMonth: { [key: string]: number } = {};
-    courses.forEach((course) => {
-      const startMonth = new Date(course.InitialDate).getMonth();
-      const endMonth = new Date(course.FinalDate).getMonth();
-      const videoSize = course.Video?.sizeMb || 0;
-
-      for (let month = startMonth; month <= endMonth; month++) {
-        const monthName = new Date(0, month).toLocaleString("pt-BR", {
-          month: "long",
-        });
-        memoryByMonth[monthName] = (memoryByMonth[monthName] || 0) + videoSize;
-      }
-    });
-    return Object.entries(memoryByMonth).map(([month, size]) => ({
-      month,
-      size,
-    }));
-  };
 
   const totalMemory = calculateTotalMemory(courses);
   const memoryByMonth = calculateMemoryByMonth(courses);
