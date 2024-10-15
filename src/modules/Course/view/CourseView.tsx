@@ -67,7 +67,6 @@ const CourseView: React.FC<{ course: Course }> = ({ course }) => {
         onClick={goToPreviousPage}
         size="sm"
         mb={3}
-        cursor=""
         colorScheme="teal"
       >
         Voltar

@@ -178,13 +178,18 @@ const CourseList: React.FC = () => {
         templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
       >
         {filteredCourses.map((course) => (
-          <Card maxW="md" boxShadow="md" onClick={() => viewCourse(course)}>
+          <Card
+            maxW="md"
+            boxShadow="md"
+            onClick={() => viewCourse(course)}
+            cursor="pointer "
+            key={course.id}
+          >
             <CardHeader>
               <Heading size="md">{course.title}</Heading>
             </CardHeader>
             <CardBody>
               <Text fontSize="md" color="#8c8c8c">
-                {" "}
                 {course.description}
               </Text>
               <Text fontSize="md" mt={4}>
