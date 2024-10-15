@@ -16,6 +16,7 @@ import {
   Grid,
   VStack,
   Heading,
+  Button,
 } from "@chakra-ui/react";
 import { useBreakpointValue } from "@chakra-ui/react";
 import {
@@ -28,14 +29,20 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 const ReportView = () => {
   const [courses, setCourses] = useState<Course[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setCourses(CourseDefaultList);
   }, []);
 
+  const goToPreviousPage = () => {
+    navigate("/");
+  };
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const calculateTotalMemory = (courses: Course[]) => {
