@@ -72,14 +72,25 @@ const ReportView = () => {
     }));
   };
 
-  // const totalMemory = calculateTotalMemory(courses);
+  const totalMemory = calculateTotalMemory(courses);
   const memoryByMonth = calculateMemoryByMonth(courses);
 
   return (
     <Box p={4}>
+      <Button
+        leftIcon={<ArrowBackIcon />}
+        onClick={goToPreviousPage}
+        size="sm"
+        mb={3}
+        colorScheme="teal"
+      >
+        Voltar
+      </Button>
       <VStack spacing={8} align="stretch">
         <Box>
-          <Heading size="lg" mb={4}>Relatório de Cursos</Heading>
+          <Heading size="lg" mb={4}>
+            Relatório de Cursos
+          </Heading>
           <Box height={{ base: "300px", md: "400px" }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
@@ -96,16 +107,19 @@ const ReportView = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="size" fill="#8884d8" name="Tamanho do Vídeo (MB)" />
+                <Bar
+                  dataKey="size"
+                  fill="#8884d8"
+                  name="Tamanho do Vídeo (MB)"
+                />
               </BarChart>
             </ResponsiveContainer>
           </Box>
-          {/* testar responsividade para mobile */}
-          {/* {isMobile && (
+          {isMobile && (
             <Text fontSize="sm" mt={2} textAlign="center">
               Deslize para ver o gráfico completo
             </Text>
-          )} */}
+          )}
         </Box>
 
         <Flex direction={{ base: "column", lg: "row" }} gap={8}>
@@ -121,15 +135,24 @@ const ReportView = () => {
                 {courses.map((course) => (
                   <Tr key={course.id}>
                     <Td>{course.Video?.description || "Sem título"}</Td>
-                    <Td isNumeric fontWeight="bold">{course.Video?.sizeMb || 0}</Td>
+                    <Td isNumeric fontWeight="bold">
+                      {course.Video?.sizeMb || 0}
+                    </Td>
                   </Tr>
                 ))}
               </Tbody>
             </Table>
           </TableContainer>
-                  {/* testar amanhã pra ver se vai dar certo */}
-          {/* <Grid templateColumns={{ base: "repeat(1, 1fr)", sm: "repeat(2, 1fr)" }} gap={4}>
-            <Square size={{ base: "100%", sm: "150px" }} bg="teal.500" color="white" borderRadius="md">
+          <Grid
+            templateColumns={{ base: "repeat(1, 1fr)", sm: "repeat(2, 1fr)" }}
+            gap={4}
+          >
+            <Square
+              size={{ base: "100%", sm: "150px" }}
+              bg="teal.500"
+              color="white"
+              borderRadius="md"
+            >
               <Box textAlign="center">
                 <Text fontSize="lg" fontWeight="bold">
                   Total de memória
@@ -139,7 +162,12 @@ const ReportView = () => {
                 </Text>
               </Box>
             </Square>
-            <Square size={{ base: "100%", sm: "150px" }} bg="blue.500" color="white" borderRadius="md">
+            <Square
+              size={{ base: "100%", sm: "150px" }}
+              bg="blue.500"
+              color="white"
+              borderRadius="md"
+            >
               <Box textAlign="center">
                 <Text fontSize="lg" fontWeight="bold">
                   Total de cursos
@@ -149,7 +177,12 @@ const ReportView = () => {
                 </Text>
               </Box>
             </Square>
-            <Square size={{ base: "100%", sm: "150px" }} bg="green.500" color="white" borderRadius="md">
+            <Square
+              size={{ base: "100%", sm: "150px" }}
+              bg="green.500"
+              color="white"
+              borderRadius="md"
+            >
               <Box textAlign="center">
                 <Text fontSize="lg" fontWeight="bold">
                   Média de tamanho
@@ -159,17 +192,25 @@ const ReportView = () => {
                 </Text>
               </Box>
             </Square>
-            <Square size={{ base: "100%", sm: "150px" }} bg="purple.500" color="white" borderRadius="md">
+            <Square
+              size={{ base: "100%", sm: "150px" }}
+              bg="purple.500"
+              color="white"
+              borderRadius="md"
+            >
               <Box textAlign="center">
                 <Text fontSize="lg" fontWeight="bold">
                   Maior vídeo
                 </Text>
                 <Text fontSize="2xl" fontWeight="bold">
-                  {Math.max(...courses.map(course => course.Video?.sizeMb || 0))} MB
+                  {Math.max(
+                    ...courses.map((course) => course.Video?.sizeMb || 0)
+                  )}{" "}
+                  MB
                 </Text>
               </Box>
             </Square>
-          </Grid> */}
+          </Grid>
         </Flex>
       </VStack>
     </Box>
