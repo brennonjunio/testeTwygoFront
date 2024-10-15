@@ -41,7 +41,7 @@ export const CourseDefaultList: Course[] = [
     InitialDate: new Date("2024-01-15"),
     FinalDate: new Date("2024-02-25"),
     Video: {
-      description: "title: de Python para Iniciantes videoAula",
+      description: "de Python para Iniciantes videoAula",
       sizeMb: 1234,
     },
   },
@@ -52,7 +52,7 @@ export const CourseDefaultList: Course[] = [
     InitialDate: new Date("2024-03-05"),
     FinalDate: new Date("2024-10-30"),
     Video: {
-      description: "title:  com Node.js videoAula",
+      description: " com Node.js videoAula",
       sizeMb: 960,
     },
   },
@@ -63,7 +63,7 @@ export const CourseDefaultList: Course[] = [
     InitialDate: new Date("2024-05-20"),
     FinalDate: new Date("2024-11-25"),
     Video: {
-      description: "title:  Design UX/UI videoAula",
+      description: " Design UX/UI videoAula",
       sizeMb: 500,
     },
   },
@@ -74,7 +74,7 @@ export const CourseDefaultList: Course[] = [
     InitialDate: new Date("2024-02-15"),
     FinalDate: new Date("2024-12-25"),
     Video: {
-      description: "title:  DevOps e Integração Contínua videoAula",
+      description: " DevOps e Integração Contínua videoAula",
       sizeMb: 650,
     },
   },
@@ -85,7 +85,7 @@ export const CourseDefaultList: Course[] = [
     InitialDate: new Date("2024-07-01"),
     FinalDate: new Date("2024-08-15"),
     Video: {
-      description: "title: de Segurança da Informação videoAula",
+      description: "de Segurança da Informação videoAula",
       sizeMb: 775,
     },
   },
