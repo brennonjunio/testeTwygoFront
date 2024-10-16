@@ -56,9 +56,7 @@ export const calculateMemoryByMonth = (courses: Course[]) => {
 
 export const ValidateDate = (data1: string, data2: string) => {
   const d1 = new Date(data1);
-  console.log("🚀 ~ ValidateDate ~ d1:", d1);
   const d2 = new Date(data2);
-  console.log("🚀 ~ ValidateDate ~ d2:", d2);
 
   if (d1 > d2) return "Data inicial maior que final";
 
