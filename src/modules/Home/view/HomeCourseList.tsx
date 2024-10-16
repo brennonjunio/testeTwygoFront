@@ -142,7 +142,7 @@ const CourseList: React.FC = () => {
           size="sm"
           leftIcon={<AddIcon />}
         >
-          Adicionar Curso
+          Adicionar
         </Button>
       </Flex>
       <hr style={{ borderColor: "#c7c7c7", marginTop: "10px" }} />
