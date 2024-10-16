@@ -21,7 +21,7 @@ import {
 import { DeleteIcon, EditIcon, AddIcon } from "@chakra-ui/icons";
 import CourseForm from "../../Course/view/ModalCoursForm";
 import { Course } from "../../../services/Course/InterfaceCourse";
-import { formatDate } from "../../../services/Utils";
+import { formatDate, formatToStandardDate } from "../../../services/Utils";
 import { CourseDefaultList } from "../../../services/Course/CourseObjectDefault";
 import { useNavigate } from "react-router-dom";
 import { RiDashboard3Line } from "react-icons/ri";
@@ -111,16 +111,13 @@ const CourseList: React.FC = () => {
     setFilteredCourses(filtered);
   }, [courses, titleFilter, statusFilter]);
 
-  // const gridColumns = useBreakpointValue({
-  //   base: 1,
-  //   sm: 2,
-  //   md: 3,
-  //   lg: 4,
-  //   xl: 5,
-  // });
-
   const isCourseOpen = (finalDate: string) => {
-    return new Date(finalDate) > new Date();
+    const today = new Date();
+    today.setDate(today.getDate() - 1);
+    const newTodayDate = formatToStandardDate(today);
+    const newFinalDate = formatToStandardDate(finalDate);
+
+    return newFinalDate > newTodayDate;
   };
 
   return (
