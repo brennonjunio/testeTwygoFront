@@ -14,9 +14,10 @@ import {
   VStack,
   Heading,
   SimpleGrid,
+  useToast,
 } from "@chakra-ui/react";
 import { Course } from "../../../services/Course/InterfaceCourse";
-import { formatToStandardDate } from "../../../services/Utils";
+import { formatToStandardDate, ValidateDate } from "../../../services/Utils";
 
 interface CourseFormProps {
   onClose: () => void;
@@ -39,6 +40,7 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
   });
 
   const [error, setError] = useState<boolean>(false);
+  const toast = useToast();
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -47,20 +49,16 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
     [body]
   );
 
+  // const validateBody  =() =>{
+  //   if()
+  // }
+
   const handleSubmit = () => {
-    if (
-      !body.title ||
-      !body.description ||
-      !body.InitialDate ||
-      !body.FinalDate
-    ) {
-      setError(true);
-    }
     setError(false);
-    if (onSave) {
+    if (onSave && !error) {
       onSave(body);
+      onClose();
     }
-    onClose();
   };
 
   useEffect(() => {
@@ -68,6 +66,35 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
       setBody(params);
     }
   }, [params]);
+
+  useEffect(() => {
+    if (
+      !body.title ||
+      !body.description ||
+      !body.InitialDate ||
+      !body.FinalDate
+    ) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+
+    const validate = ValidateDate(
+      body.InitialDate.toString(),
+      body.FinalDate.toString()
+    );
+
+    if (validate !== "") {
+      toast({
+        title: "Formato de data inválido",
+        description: `${validate}`,
+        status: "warning",
+        duration: 4000,
+        isClosable: false,
+      });
+      setError(true);
+    }
+  }, [body, toast]);
 
   return (
     <Modal isOpen={true} onClose={onClose} isCentered size="xl">
@@ -78,7 +105,7 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
         </ModalHeader>
         <ModalBody>
           <VStack spacing={4} align="stretch">
-            <FormControl isRequired isInvalid={error && !body.title}>
+            <FormControl isRequired isInvalid={!body.title}>
               <FormLabel>Título</FormLabel>
               <Input
                 name="title"
@@ -87,7 +114,7 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
                 placeholder="Digite o título do curso"
               />
             </FormControl>
-            <FormControl isRequired isInvalid={error && !body.description}>
+            <FormControl isRequired isInvalid={!body.description}>
               <FormLabel>Descrição</FormLabel>
               <Textarea
                 name="description"
@@ -98,7 +125,7 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
               />
             </FormControl>
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-              <FormControl isRequired isInvalid={error && !body.InitialDate}>
+              <FormControl isRequired isInvalid={!body.InitialDate}>
                 <FormLabel>Data de Início</FormLabel>
                 <Input
                   name="InitialDate"
@@ -107,7 +134,7 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
                   onChange={handleInputChange}
                 />
               </FormControl>
-              <FormControl isRequired isInvalid={error && !body.FinalDate}>
+              <FormControl isRequired isInvalid={!body.FinalDate}>
                 <FormLabel>Data de Fim</FormLabel>
                 <Input
                   name="FinalDate"
@@ -121,7 +148,12 @@ const ModalCourseForm: React.FC<CourseFormProps> = ({
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+          <Button
+            colorScheme="teal"
+            mr={3}
+            onClick={handleSubmit}
+            isDisabled={error}
+          >
             Salvar
           </Button>
           <Button variant="ghost" onClick={onClose}>
