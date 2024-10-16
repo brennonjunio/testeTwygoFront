@@ -131,10 +131,10 @@ const ReportView = () => {
               borderRadius="md"
             >
               <Box textAlign="center">
-                <Text fontSize="lg" fontWeight="bold">
+                <Text fontSize="lg" fontWeight="bold" p={1}>
                   Total de memória
                 </Text>
-                <Text fontSize="2xl" fontWeight="bold">
+                <Text fontSize="2x1" fontWeight="bold">
                   {totalMemory} MB
                 </Text>
               </Box>
